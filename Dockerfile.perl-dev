@@ -1,0 +1,8 @@
+FROM perl:latest
+
+RUN curl -L http://cpanmin.us | perl - App::cpanminus
+RUN cpanm Carton 
+
+WORKDIR /code
+
+CMD ["bash"]
