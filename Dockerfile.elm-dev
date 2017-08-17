@@ -1,21 +1,14 @@
 # image with Node, Elm and Nginx
 FROM debian:latest
-
-# prepare
-RUN apt-get -y update
-RUN apt-get -y install apt-utils
-
-RUN apt-get -y install curl
-
-RUN apt-get -y install gnupg
-RUN apt-get -y install sudo
-
-RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-RUN apt-get install -y nodejs
-
-RUN sudo npm install -g elm
-RUN sudo npm install -g elm-test
-
-RUN apt-get install -y nginx
-
+ENV DEBIAN_FRONTEND=noninteractive
 EXPOSE 8000 80
+# prepare
+RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup && \
+    echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache &&\
+    apt-get update && \
+    apt-get -y install apt-utils curl gnupg nginx
+
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g elm && \
+    npm install -g elm-test
